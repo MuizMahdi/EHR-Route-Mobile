@@ -1,4 +1,3 @@
-// http://ionicframework.com/docs/theming/
 @import '~@ionic/angular/css/core.css';
 @import '~@ionic/angular/css/normalize.css';
 @import '~@ionic/angular/css/structure.css';
@@ -9,3 +8,55 @@
 @import '~@ionic/angular/css/text-alignment.css';
 @import '~@ionic/angular/css/text-transformation.css';
 @import '~@ionic/angular/css/flex-utils.css';
+
+
+* {
+   font-family: "QanelasSoft-UltraLight";
+   letter-spacing: 0.1em;
+   color: rgb(60, 60, 60);
+}
+
+a {
+   text-decoration: none;
+}
+
+
+@font-face {
+   font-family: "QanelasSoft-Bold";
+   src: url("assets/css/fonts/QanelasSoft-Bold.otf") format("opentype");
+}
+
+@font-face {
+   font-family: "QanelasSoft-ExtraBold";
+   src: url("assets/css/fonts/QanelasSoft-ExtraBold.otf") format("opentype");
+}
+
+@font-face {
+   font-family: "QanelasSoft-Heavy";
+   src: url("assets/css/fonts/QanelasSoft-Heavy.otf") format("opentype");
+}
+
+@font-face {
+   font-family: "QanelasSoft-Light";
+   src: url("assets/css/fonts/QanelasSoft-Light.otf") format("opentype");
+}
+
+@font-face {
+   font-family: "QanelasSoft-Medium";
+   src: url("assets/css/fonts/QanelasSoft-Medium.otf") format("opentype");
+}
+
+@font-face {
+   font-family: "QanelasSoft-Regular";
+   src: url("assets/css/fonts/QanelasSoft-Regular.otf") format("opentype");
+}
+
+@font-face {
+   font-family: "QanelasSoft-SemiBold";
+   src: url("assets/css/fonts/QanelasSoft-SemiBold.otf") format("opentype");
+}
+
+@font-face {
+   font-family: "QanelasSoft-UltraLight";
+   src: url("assets/css/fonts/QanelasSoft-UltraLight.otf") format("opentype");
+}
