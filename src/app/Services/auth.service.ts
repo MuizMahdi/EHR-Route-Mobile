@@ -10,7 +10,7 @@ import { ToastController } from '@ionic/angular';
 
 
 @Injectable({
-  providedIn: 'root'
+   providedIn: 'root'
 })
 
 
@@ -43,6 +43,7 @@ export class AuthService
    }
 
 
+
    public login(userLoginInfo: UserLoginRequest): Observable<any>
    {
 
@@ -69,6 +70,27 @@ export class AuthService
    }
 
 
+   public async logout()
+   {
+      // Remove JWT
+      localStorage.removeItem('accessToken');
+
+      // Remove user info
+      localStorage.removeItem('currentUser');
+
+      // Reset currentUser subject
+      this.currentUser.next(null);
+      this.currentUser = new Subject<any>();
+   }
+
+
+   public getCurrentUser(): UserInfo
+   {
+      // Get user info from local storage
+      return JSON.parse(localStorage.getItem('currentUser')) as UserInfo;
+   }
+   
+
    public getCurrentUserInfo(): Observable<any>
    {
       return this.http.get(this.getCurrentUserUrl).pipe(first(),
@@ -78,6 +100,12 @@ export class AuthService
          })
 
       );
+   }
+
+
+   public getAccessToken():any 
+   {
+      return localStorage.getItem('accessToken');
    }
 
 
@@ -113,8 +141,8 @@ export class AuthService
    }
 
 
-   async showNotification(notificationMessage:string) {
-
+   async showNotification(notificationMessage:string) 
+   {
       // Show a toast notification with a message
       const toast = await this.toastController.create({
         message: notificationMessage,
@@ -123,5 +151,5 @@ export class AuthService
 
       toast.present();
    }
-  
+
 }
