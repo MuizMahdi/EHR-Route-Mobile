@@ -1,3 +1,4 @@
+import { UserLoginRequest } from './../Models/Payload/Requests/UserLoginRequest';
 import { UserRegistrationRequest } from './../Models/Payload/Requests/UserRegistrationRequest';
 import { UserInfo } from './../Models/Payload/Responses/UserInfo';
 import { Injectable } from '@angular/core';
@@ -35,17 +36,92 @@ export class AuthService
 
          // On registration error
          catchError(async (error) => { 
-
-            // Show a toast notification
-            let toast = await this.toastController.create({
-               message: 'Registration Error',
-               duration: 2000
-            });
-
-            toast.present();
-
+            await this.showNotification('Registration Error');
          })
          
       );
    }
+
+
+   public login(userLoginInfo: UserLoginRequest): Observable<any>
+   {
+
+      return this.http.post(this.loginUrl, userLoginInfo).pipe(
+
+         // Upon received the JWT from server
+         tap(tokenResponse => {
+
+            // Save the Json Web Token (JWT)
+            this.saveSession(tokenResponse);
+
+            // Set as logged in
+            this.isLoggedIn = true;
+  
+            shareReplay()
+
+         }),
+         
+         catchError(async (error) => { 
+            await this.showNotification('Login Error');
+         })
+
+      );
+   }
+
+
+   public getCurrentUserInfo(): Observable<any>
+   {
+      return this.http.get(this.getCurrentUserUrl).pipe(first(),
+ 
+         catchError(async (error) => {
+            await this.showNotification('Error - getting user info');
+         })
+
+      );
+   }
+
+
+   private saveSession(token): void
+   {
+      // Save the JWT in local storage
+      if (token && token.accessToken) {
+         localStorage.setItem('accessToken', token.accessToken)
+      }
+
+      // Save user's info in local storage
+      this.saveCurrentUserInfo();
+   }
+
+
+   private saveCurrentUserInfo(): void
+   {
+      this.getCurrentUserInfo().subscribe(
+
+         (userInfo:UserInfo) => {
+            // Save the user info in local storage
+            localStorage.setItem('currentUser', JSON.stringify(userInfo));
+
+            // Set the user in the user subject, so subscribers will know when user info is received
+            this.currentUser.next(userInfo);
+         },
+
+         async (error) => {
+            await this.showNotification('Error - saving user info');
+         }
+
+      );
+   }
+
+
+   async showNotification(notificationMessage:string) {
+
+      // Show a toast notification with a message
+      const toast = await this.toastController.create({
+        message: notificationMessage,
+        duration: 2000
+      });
+
+      toast.present();
+   }
+  
 }
