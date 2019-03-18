@@ -26,6 +26,15 @@ const routes: Routes = [
             ]
          },
          {
+            path: 'record',
+            children: [
+               {
+                  path: '',
+                  loadChildren: '../health-record/health-record.module#HealthRecordPageModule'
+               }
+            ]
+         },
+         {
             path: 'settings',
             children: [
                {
