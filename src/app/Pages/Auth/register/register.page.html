@@ -1,9 +1,47 @@
-<ion-header>
-  <ion-toolbar>
-    <ion-title>register</ion-title>
-  </ion-toolbar>
-</ion-header>
+<ion-content padding center>
 
-<ion-content padding>
+      <div class="header-text">
+         <h2>
+            <b>Welcome,</b><br>
+            <span style="color:rgb(130, 130, 130);">sign up to continue</span>
+         </h2>
+      </div>
+      
+   
+      <ion-list>
 
-</ion-content>
+         <ion-item>
+            <ion-input placeholder="Name"></ion-input>
+         </ion-item>
+   
+         <ion-item>
+            <ion-input placeholder="Username"></ion-input>
+         </ion-item>
+   
+         <ion-item>
+            <ion-input placeholder="Email"></ion-input>
+         </ion-item>
+         
+         <ion-item>
+               <ion-input placeholder="Password"></ion-input>
+         </ion-item>
+   
+         <ion-item>
+            <ion-input placeholder="Confirm Password"></ion-input>
+         </ion-item>
+   
+      </ion-list>
+   
+
+      <ion-button (click)="onRegister()" expand="block" fill="clear">
+         Register
+      </ion-button>
+   
+      <br>
+   
+      <a class="login-text" href="javascript:void(0)" (click)="toLogin()">
+         Already have an account ? <b>Sign In</b>
+      </a>
+   
+   </ion-content>
+   

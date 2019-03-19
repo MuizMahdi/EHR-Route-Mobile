@@ -1,0 +1,40 @@
+ion-content {
+   overflow: scroll;
+}
+
+.header-text {
+   position: fixed;
+   left: 13%;
+   top: 7%;
+   width: 75%;
+}
+
+ion-list {
+   position: fixed;
+   left: 13%;
+   bottom: 30%;
+   width: 75%;
+}
+
+ion-input {
+   font-size: 0.9em;
+   font-family: "QanelasSoft-Regular";
+   color: rgb(100, 100, 100);
+}
+
+ion-button {
+   position: fixed;
+   left: 11%;
+   bottom: 18%;
+   color: #4DE3B6;
+   font-size: 1.3em;
+   font-family: "QanelasSoft-Medium";
+}
+
+.login-text {
+   position: fixed;
+   font-size: 0.8em;
+   color: rgb(130, 130, 130);
+   left: 13%;
+   bottom: 5%;
+}

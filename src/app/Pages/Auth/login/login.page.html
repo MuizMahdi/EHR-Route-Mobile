@@ -1,7 +1,7 @@
 <ion-content padding center>
 
    <div class="header-text">
-      <ion-title> EHRoute </ion-title>
+      <ion-title>EHRoute</ion-title>
       <h2>
          <b>Welcome back,</b><br>
          <span style="color:rgb(130, 130, 130);">sign in to continue</span>
@@ -9,17 +9,21 @@
    </div>
    
 
-   <ion-list>
+   
+   <form [formGroup]="loginFormGroup">
 
-      <ion-item>
-         <ion-input placeholder="Username"></ion-input>
-      </ion-item>
+      <ion-list>
+         <ion-item>
+            <ion-input formControlName="usernameOrEmailCtrl" placeholder="Username or Email"></ion-input>
+         </ion-item>
 
-      <ion-item>
-         <ion-input placeholder="Password" type="password"></ion-input>
-      </ion-item>
+         <ion-item>
+            <ion-input formControlName="passwordCtrl" type="password" placeholder="Password"></ion-input>
+         </ion-item>
+      </ion-list>
 
-   </ion-list>
+   </form>
+   
 
    <ion-button (click)="onLogin()" expand="block" fill="clear">
       Login
