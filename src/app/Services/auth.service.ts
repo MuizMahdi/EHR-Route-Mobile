@@ -70,7 +70,7 @@ export class AuthService
    }
 
 
-   public async logout()
+   public logout()
    {
       // Remove JWT
       localStorage.removeItem('accessToken');
