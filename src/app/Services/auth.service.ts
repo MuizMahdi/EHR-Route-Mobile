@@ -1,3 +1,4 @@
+import { Toast } from '@ionic-native/toast/ngx';
 import { UserLoginRequest } from './../Models/Payload/Requests/UserLoginRequest';
 import { UserRegistrationRequest } from './../Models/Payload/Requests/UserRegistrationRequest';
 import { UserInfo } from './../Models/Payload/Responses/UserInfo';
@@ -6,7 +7,6 @@ import { HttpClient } from '@angular/common/http';
 import { environment } from 'src/environments/environment';
 import { Subject, Observable, throwError } from 'rxjs';
 import { tap, shareReplay, catchError, first } from 'rxjs/operators';
-import { ToastController } from '@ionic/angular';
 
 
 @Injectable({
@@ -25,7 +25,7 @@ export class AuthService
    isLoggedIn:boolean = false;
 
 
-   constructor(private http:HttpClient, public toastController:ToastController) 
+   constructor(private http:HttpClient, private toast:Toast) 
    { }
 
 
@@ -63,7 +63,7 @@ export class AuthService
          }),
          
          catchError(async (error) => { 
-            await this.showNotification('Login Error');
+            this.showNotification('Login Error');
          })
 
       );
@@ -141,15 +141,14 @@ export class AuthService
    }
 
 
-   async showNotification(notificationMessage:string) 
+   showNotification(notificationMessage:string) 
    {
       // Show a toast notification with a message
-      const toast = await this.toastController.create({
-        message: notificationMessage,
-        duration: 2000
-      });
-
-      toast.present();
+      const toast = this.toast.show(notificationMessage, '2000', 'center').subscribe(
+         toast => {
+            console.log(toast);
+         }
+      );
    }
 
 }
