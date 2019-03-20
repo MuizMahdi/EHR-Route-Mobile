@@ -19,7 +19,7 @@ export class RegisterPage implements OnInit
    { }
 
 
-   private toLogin(): void
+   toLogin(): void
    {
       this.router.navigate(['/login']);
    }

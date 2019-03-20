@@ -1,5 +1,7 @@
 {
   "name": "EhrRoute-Mobile",
-  "integrations": {},
+  "integrations": {
+    "cordova": {}
+  },
   "type": "angular"
 }

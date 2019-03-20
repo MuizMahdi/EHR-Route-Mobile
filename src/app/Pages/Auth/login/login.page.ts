@@ -32,7 +32,7 @@ export class LoginPage implements OnInit
    }
 
 
-   private toRegistration(): void
+   toRegistration(): void
    {
       this.router.navigate(['/register']);
    }
@@ -47,7 +47,7 @@ export class LoginPage implements OnInit
    }
 
 
-   private onLogin()
+   onLogin()
    {
       // LoginFormGroup values
       this.loginUsernameOrEmail = this.loginFormGroup.get("usernameOrEmailCtrl").value;
