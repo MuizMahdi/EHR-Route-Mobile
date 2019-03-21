@@ -7,33 +7,35 @@
          </h2>
       </div>
       
-   
+      <form [formGroup]="registrationFormGroup" novalidate>
+
+      </form>
       <ion-list>
 
          <ion-item>
-            <ion-input placeholder="Name"></ion-input>
+            <ion-input formControlName="nameCtrl" placeholder="Name" required></ion-input>
          </ion-item>
    
          <ion-item>
-            <ion-input placeholder="Username"></ion-input>
+            <ion-input formControlName="usernameCtrl" placeholder="Username" required></ion-input>
          </ion-item>
    
          <ion-item>
-            <ion-input placeholder="Email"></ion-input>
+            <ion-input formControlName="emailCtrl" placeholder="Email" required></ion-input>
          </ion-item>
          
          <ion-item>
-               <ion-input placeholder="Password"></ion-input>
+               <ion-input formControlName="passwordCtrl" placeholder="Password" required></ion-input>
          </ion-item>
    
          <ion-item>
-            <ion-input placeholder="Confirm Password"></ion-input>
+            <ion-input formControlName="passwordConfirmCtrl" placeholder="Confirm Password" required></ion-input>
          </ion-item>
    
       </ion-list>
    
 
-      <ion-button expand="block" fill="clear">
+      <ion-button (click)="onRegistration()" expand="block" fill="clear">
          Register
       </ion-button>
    
