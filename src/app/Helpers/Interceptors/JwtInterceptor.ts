@@ -2,6 +2,7 @@ import { HttpRequest, HttpInterceptor, HttpEvent, HttpHandler } from '@angular/c
 import { AuthService } from './../../Services/auth.service';
 import { Injectable } from "@angular/core";
 import { Observable } from 'rxjs';
+import { Toast } from '@ionic-native/toast/ngx';
 
 
 @Injectable()

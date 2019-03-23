@@ -1,3 +1,4 @@
+import { Address } from './../Entities/Address';
 import { AddressResponse } from './../Models/Payload/Responses/AddressResponse';
 import { ErrorResponse } from './../Models/Payload/Responses/ErrorResponse';
 import { Toast } from '@ionic-native/toast/ngx';
@@ -6,6 +7,8 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { environment } from 'src/environments/environment.prod';
 import { Observable, throwError } from 'rxjs';
+import ModelMapper from '../Helpers/Utils/ModelMapper';
+import { getRepository, Repository } from 'typeorm';
 
 
 @Injectable({
@@ -17,7 +20,7 @@ export class AddressService
    private addressGenerationUrl:string = environment.apiUrl + '/address/generate';
 
 
-   constructor(private http:HttpClient) 
+   constructor(private http:HttpClient, private toast:Toast) 
    { }
 
 
@@ -30,4 +33,16 @@ export class AddressService
       );
    }
 
+
+   public async saveUserAddress(addressResponse:AddressResponse, userID:number)
+   {
+      // Get address repository
+      const addressRepository = getRepository('address') as Repository<Address>;
+
+      // Map the address response to address
+      let address:Address = ModelMapper.mapAddressResponseToAddress(addressResponse);
+
+      // Persist the address response data
+      await addressRepository.save(address);
+   }
 }
