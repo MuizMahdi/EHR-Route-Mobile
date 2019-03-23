@@ -7,6 +7,7 @@ import { HttpClient } from '@angular/common/http';
 import { environment } from 'src/environments/environment';
 import { Subject, Observable, throwError } from 'rxjs';
 import { tap, shareReplay, catchError, first } from 'rxjs/operators';
+import { ErrorResponse } from '../Models/Payload/Responses/ErrorResponse';
 
 
 @Injectable({
@@ -93,12 +94,11 @@ export class AuthService
 
    public getCurrentUserInfo(): Observable<any>
    {
-      return this.http.get(this.getCurrentUserUrl).pipe(first(),
- 
-         catchError(async (error) => {
-            await this.showNotification('Error - getting user info');
+      return this.http.get(this.getCurrentUserUrl).pipe(
+         catchError((error:ErrorResponse) => {
+            this.showNotification('Error Getting User Info');
+            return throwError(error);
          })
-
       );
    }
 
@@ -133,8 +133,8 @@ export class AuthService
             this.currentUser.next(userInfo);
          },
 
-         async (error) => {
-            await this.showNotification('Error - saving user info');
+         error => {
+            this.showNotification('Error - saving user info');
          }
 
       );
@@ -144,11 +144,7 @@ export class AuthService
    showNotification(notificationMessage:string) 
    {
       // Show a toast notification with a message
-      const toast = this.toast.show(notificationMessage, '2000', 'center').subscribe(
-         toast => {
-            console.log(toast);
-         }
-      );
+      const toast = this.toast.show(notificationMessage, '60000', 'bottom').subscribe();
    }
 
 }

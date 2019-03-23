@@ -106,9 +106,12 @@ export class LoginPage implements OnInit
       this.addressService.generateUserAddress().subscribe(
 
          async (addressResponse:AddressResponse) => {
+
             // Get current user id
             let userID: number = this.authService.getCurrentUser().id;
 
+            // Persist address locally
+            await this.addressService.saveUserAddress(addressResponse, userID);
          },
 
          (error:ErrorResponse) => {
@@ -117,7 +120,7 @@ export class LoginPage implements OnInit
                // Do nothing
             }
             else {
-               this.toast.show(error.message,'3000', 'bottom');
+               this.toast.show(error.message,'2000', 'bottom');
             }
          }
 
