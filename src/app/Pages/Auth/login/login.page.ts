@@ -1,3 +1,7 @@
+import { Toast } from '@ionic-native/toast/ngx';
+import { ErrorResponse } from './../../../Models/Payload/Responses/ErrorResponse';
+import { AddressResponse } from './../../../Models/Payload/Responses/AddressResponse';
+import { AddressService } from './../../../Services/address.service';
 import { UserInfo } from './../../../Models/Payload/Responses/UserInfo';
 import { first } from 'rxjs/operators';
 import { AuthService } from './../../../Services/auth.service';
@@ -22,8 +26,10 @@ export class LoginPage implements OnInit
    loginPassword: string;
 
 
-   constructor(private router:Router, private authService:AuthService) 
-   { }
+   constructor(
+      private router:Router, private authService:AuthService,
+      private addressService:AddressService, private toast:Toast
+   ) { }
 
 
    ngOnInit() 
@@ -96,6 +102,25 @@ export class LoginPage implements OnInit
 
    generateUserAddress(userInfo:UserInfo)
    {
-      console.log("Generating user's address");
+      // Generate an address for the user to be saved on local DB
+      this.addressService.generateUserAddress().subscribe(
+
+         async (addressResponse:AddressResponse) => {
+            // Get current user id
+            let userID: number = this.authService.getCurrentUser().id;
+
+         },
+
+         (error:ErrorResponse) => {
+            // If user already has an address (HTTP 409 Conflict)
+            if (error.httpStatus == 409) {
+               // Do nothing
+            }
+            else {
+               this.toast.show(error.message,'3000', 'bottom');
+            }
+         }
+
+      );
    }
 }
