@@ -1,0 +1,78 @@
+<ion-content padding>
+
+   <div class="header-text">
+      <p>
+         This information will be used on your health records.
+         It will be saved on your device and will <b>not</b> be 
+         shared among healthcare institutions without your consent.
+      </p>
+   </div>
+
+
+   <form [formGroup]="userInfoForm">
+
+      <ion-item>
+         <ion-input formControlName="nameCtrl" placeholder="Full Name" required></ion-input>
+      </ion-item>
+
+      <ion-item>
+         <ion-label>Birthdate</ion-label>
+         <ion-datetime formControlName="birthCtrl" display-format="MMMM D, YYYY"></ion-datetime>
+      </ion-item>
+
+      <ion-list>
+         <ion-radio-group formControlName="genderSelectCtrl">
+
+            <ion-list-header>
+               <ion-label>Gender</ion-label>
+            </ion-list-header>
+
+            <ion-item>
+               <ion-label>Male</ion-label>
+               <ion-radio slot="start" value="male" checked></ion-radio>
+            </ion-item>
+            
+            <ion-item>
+               <ion-label>Female</ion-label>
+               <ion-radio slot="start" value="female"></ion-radio>
+            </ion-item>
+
+         </ion-radio-group>
+      </ion-list>
+
+      <ion-item>
+         <ion-input formControlName="phoneCtrl" placeholder="Phone" required></ion-input>
+      </ion-item>
+
+      <ion-item>
+         <ion-label>Country</ion-label>
+         <ion-select formControlName="countryCtrl" (ngModelChange)="onCountrySelect($event)">
+            <ion-select-option *ngFor="let c of countries">
+               {{c.name}}
+            </ion-select-option>
+         </ion-select>
+      </ion-item>
+
+      <ion-item>
+         <ion-label>City</ion-label>
+         <ion-select formControlName="cityCtrl">
+            <ion-select-option *ngFor="let c of countryCities">
+               {{c.matching_full_name}}
+            </ion-select-option>
+         </ion-select>
+      </ion-item>
+
+      <ion-item>
+         <ion-input formControlName="addressCtrl" placeholder="Address" required></ion-input>
+      </ion-item>
+
+
+   </form>
+
+
+   <ion-button (click)="onUserInfoSubmit()" expand="block" fill="clear">
+      Submit
+   </ion-button>
+
+</ion-content>
+   
