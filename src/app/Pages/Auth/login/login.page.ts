@@ -70,9 +70,6 @@ export class LoginPage implements OnInit
 
          response => {
 
-            // Navigate to the main page (Tabs-Layout)
-            this.router.navigate(['']);
-
             // Check if its the user's first login
             this.checkIfFirstLogin();
 
@@ -86,14 +83,11 @@ export class LoginPage implements OnInit
       // When user info is received from server
       this.authService.currentUser.subscribe((userInfo:UserInfo) => {
          
-         // If user is logged in
-         if (userInfo) 
+         // If user is logged in and its the user's first time login
+         if (userInfo && userInfo.firstLogin) 
          {
-            // check if its the user's first time login
-            if (userInfo.firstLogin) {
-               // Generate an address for the user
-               this.generateUserAddress(userInfo);
-            } 
+            // Generate an address for the user
+            this.generateUserAddress(userInfo);
          }
 
       });

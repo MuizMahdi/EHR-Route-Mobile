@@ -1,3 +1,4 @@
+import { InfoCompletionGuard } from './Guards/InfoCompletionGuard';
 import { AuthGuard } from './Guards/AuthGuard';
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
@@ -37,6 +38,7 @@ import { JwtInterceptor } from './Helpers/Interceptors/JwtInterceptor';
       StatusBar,
       SplashScreen,
       AuthGuard,
+      InfoCompletionGuard,
       { provide: RouteReuseStrategy, useClass: IonicRouteStrategy },
       { provide: HTTP_INTERCEPTORS, useClass: JwtInterceptor, multi: true }
    ],
