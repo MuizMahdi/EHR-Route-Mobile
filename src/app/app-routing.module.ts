@@ -1,12 +1,15 @@
 import { NgModule } from '@angular/core';
-import { PreloadAllModules, RouterModule, Routes } from '@angular/router';
 import { AuthGuard } from './Guards/AuthGuard';
+import { InfoCompletionGuard } from './Guards/InfoCompletionGuard';
+import { PreloadAllModules, RouterModule, Routes } from '@angular/router';
 
 
 const routes: Routes = [
   { path: '', loadChildren: './Pages/Tabs/tabs-layout/tabs-layout.module#TabsLayoutPageModule', canActivate:[AuthGuard]},
   { path: 'login', loadChildren: './Pages/Auth/login/login.module#LoginPageModule' },
-  { path: 'register', loadChildren: './Pages/Auth/register/register.module#RegisterPageModule' }
+  { path: 'register', loadChildren: './Pages/Auth/register/register.module#RegisterPageModule' },
+  { path: 'info-completion', loadChildren: './Pages/info-completion/info-completion.module#InfoCompletionPageModule', canActivate:[InfoCompletionGuard]}
+
 ];
 
 
