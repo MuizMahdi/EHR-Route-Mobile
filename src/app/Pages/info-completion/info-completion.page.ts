@@ -1,3 +1,8 @@
+import { PatientInfo } from './../../Models/Payload/Requests/PatientInfo';
+import { AuthService } from './../../Services/auth.service';
+import { LocationService } from './../../Services/location.service';
+import { CountryResponse } from './../../Models/Payload/Responses/CountryResponse';
+import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { Component, OnInit } from '@angular/core';
 
 
@@ -10,13 +15,82 @@ import { Component, OnInit } from '@angular/core';
 
 export class InfoCompletionPage implements OnInit 
 {
-   constructor() 
+   userInfoForm: FormGroup;
+
+   countries:CountryResponse[];
+   countryCities:any;
+   countryInputValue: string;
+
+
+   constructor(private locationService:LocationService, private authService:AuthService) 
    { }
 
 
    ngOnInit() 
    {
-
+      this.buildForm();
+      this.getCountries();
    }
 
+
+   private buildForm(): void
+   {
+      this.userInfoForm = new FormGroup({
+         nameCtrl: new FormControl(null, [Validators.required]),
+         birthCtrl: new FormControl(null, [Validators.required]), // Intended
+         genderSelectCtrl: new FormControl(null, [Validators.required]),
+         phoneCtrl: new FormControl(null, [Validators.required]),
+         countryCtrl: new FormControl(null, [Validators.required]),
+         cityCtrl: new FormControl(null, [Validators.required]),
+         addressCtrl: new FormControl(null, [Validators.required])
+      });
+   }
+
+
+   getCountries()
+   {
+      this.locationService.getCountries().subscribe(countriesData => {
+         this.countries = countriesData['_links']['country:items'];
+      });
+   }
+
+
+   private onCountrySelect(country:string): void
+   {
+      // Get the country's cities
+      this.locationService.getCities(country).subscribe(citiesData => {
+         this.countryCities = citiesData['_embedded']['city:search-results'];
+      });  
+   }
+   
+
+   private getPatientInfo(): PatientInfo
+   {
+      // Get current user's data
+      let userEmail = this.authService.getCurrentUser().email;
+      let userID = this.authService.getCurrentUser().id;
+
+      // Construct a PatientInfo object using form data
+      let userInfo:PatientInfo = {
+         name: this.userInfoForm.get("nameCtrl").value,
+         gender: this.userInfoForm.get("genderSelectCtrl").value,
+         birthDate: this.userInfoForm.get("birthCtrl").value,
+         phone: this.userInfoForm.get("phoneCtrl").value,
+         country: this.userInfoForm.get("countryCtrl").value.trim(),
+         city: this.userInfoForm.get("cityCtrl").value.trim(),
+         address: this.userInfoForm.get("addressCtrl").value,
+         email: userEmail,
+         userID: userID
+      }
+
+      return userInfo;
+   }
+
+   onUserInfoSubmit()
+   {
+      // Construct EhrPatientInfo object from form data
+      let pateintInfo = this.getPatientInfo();
+
+      console.log(pateintInfo);
+   }
 }
