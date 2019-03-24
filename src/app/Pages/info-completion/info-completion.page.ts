@@ -10,11 +10,12 @@ import { Component, OnInit } from '@angular/core';
 
 export class InfoCompletionPage implements OnInit 
 {
-
    constructor() 
    { }
 
-   ngOnInit() 
-   { }
 
+   ngOnInit() 
+   {
+     
+   }
 }
