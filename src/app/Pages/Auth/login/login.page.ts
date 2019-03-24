@@ -70,11 +70,29 @@ export class LoginPage implements OnInit
 
          response => {
 
+            // Check if user has added their info
+            this.checkHasAddedInfo();
+
             // Check if its the user's first login
             this.checkIfFirstLogin();
 
          }
       );
+   }
+
+
+   checkHasAddedInfo()
+   {
+      // When user info is received from server
+      this.authService.currentUser.subscribe((userInfo:UserInfo) => {
+
+         // Check if user didn't complete their information (on first login)
+         if (userInfo && !(userInfo.hasAddedInfo)) {
+            // Navigate to the information completion page
+            this.router.navigate(['/info-completion']);
+         }
+
+      });
    }
 
 
