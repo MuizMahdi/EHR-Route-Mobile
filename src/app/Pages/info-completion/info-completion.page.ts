@@ -16,6 +16,7 @@ export class InfoCompletionPage implements OnInit
 
    ngOnInit() 
    {
-     
+
    }
+
 }
