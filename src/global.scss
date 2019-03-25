@@ -12,7 +12,6 @@
 /* UI ELEMENTS */
 
 .note {
-   margin-top: 4vh;
    position: relative;
    width: 100%;
    padding: 0.2em 1.4em;
@@ -56,6 +55,31 @@
    text-align-last: left;
    color: #fff;
    font-family: "QanelasSoft-Medium";
+}
+
+.note-outlined {
+   position: relative;
+   width: 100%;
+   padding: 0.1em 1.3em;
+   margin: 2em auto;
+   background: rgb(255, 255, 255);
+   overflow: hidden;
+   border: rgb(178, 255, 251) solid 2px;
+   border-radius: 4px;
+}
+
+.note-outlined.sides-off {
+   border-left: 0px;
+   border-right: 0px;
+   border-radius: 0px;
+}
+
+.note-outlined p {
+   color: rgb(140, 140, 140);
+   text-align: justify;
+   text-justify: distribute;
+   text-align-last: left;
+   font-family: "QanelasSoft-UltraLight";
 }
 
 /* FONTS */
