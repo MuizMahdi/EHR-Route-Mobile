@@ -1,15 +1,17 @@
+import { PatientInfoService } from './../../Services/patient-info.service';
 import { PatientInfo } from './../../Models/Payload/Requests/PatientInfo';
 import { AuthService } from './../../Services/auth.service';
 import { LocationService } from './../../Services/location.service';
 import { CountryResponse } from './../../Models/Payload/Responses/CountryResponse';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { Component, OnInit } from '@angular/core';
+import { LoadingController } from '@ionic/angular';
 
 
 @Component({
-  selector: 'app-info-completion',
-  templateUrl: './info-completion.page.html',
-  styleUrls: ['./info-completion.page.scss'],
+   selector: 'app-info-completion',
+   templateUrl: './info-completion.page.html',
+   styleUrls: ['./info-completion.page.scss'],
 })
 
 
@@ -22,8 +24,10 @@ export class InfoCompletionPage implements OnInit
    countryInputValue: string;
 
 
-   constructor(private locationService:LocationService, private authService:AuthService) 
-   { }
+   constructor(
+      private authService:AuthService, private patientInfoService:PatientInfoService,
+      public loadingController:LoadingController, private locationService:LocationService
+   ) { }
 
 
    ngOnInit() 
@@ -55,11 +59,23 @@ export class InfoCompletionPage implements OnInit
    }
 
 
-   private onCountrySelect(country:string): void
+   private async onCountrySelect(country:string)
    {
+      // Show a loading spinning bar while fetching the country's cities
+      const citiesLoading = await this.loadingController.create({
+         message: 'Loading Cities...'
+      });
+
+      citiesLoading.present();
+
       // Get the country's cities
       this.locationService.getCities(country).subscribe(citiesData => {
+
          this.countryCities = citiesData['_embedded']['city:search-results'];
+
+         // Dismiss the loading bar
+         citiesLoading.dismiss();
+
       });  
    }
    
@@ -86,11 +102,30 @@ export class InfoCompletionPage implements OnInit
       return userInfo;
    }
 
-   onUserInfoSubmit()
+
+   private async onUserInfoSubmit()
    {
       // Construct EhrPatientInfo object from form data
       let pateintInfo = this.getPatientInfo();
 
-      console.log(pateintInfo);
+      // Show a loading bar while saving user info locally
+      const infoSaveLoading = await this.loadingController.create({
+         message: 'Saving Info...'
+      });
+
+      infoSaveLoading.present();
+
+      // Save patient info on local DB
+      await this.patientInfoService.savePatientInfo(pateintInfo).then(success => {
+         if (success) {
+            this.setUserHasSavedInfo();
+            infoSaveLoading.dismiss();
+         }
+      });
+   }
+
+   private setUserHasSavedInfo(): void
+   {
+      
    }
 }
