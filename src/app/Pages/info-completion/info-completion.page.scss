@@ -2,9 +2,30 @@ ion-content {
    overflow: scroll;
 }
 
-.header-text {
-   position: fixed;
-   left: 13%;
-   top: 7%;
-   width: 75%;
+ion-title {
+   font-size: 1.4em;
+   font-family: "QanelasSoft-Medium";
+   text-align: center;
+   margin-bottom: 4vh;
+}
+
+.note {
+   margin-bottom: 8vh;
+}
+
+.form-item {
+   margin-bottom: 4vh;
+}
+
+span {
+   color: rgb(140, 140, 140);
+   font-size: 1.03em;
+}
+
+ion-button {
+   margin-top: 7vh;
+   margin-bottom: 7vh;
+   color: #4DE3B6;
+   font-size: 1.3em;
+   font-family: "QanelasSoft-Medium";
 }

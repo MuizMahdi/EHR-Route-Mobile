@@ -9,6 +9,56 @@
 @import '~@ionic/angular/css/text-transformation.css';
 @import '~@ionic/angular/css/flex-utils.css';
 
+/* UI ELEMENTS */
+
+.note {
+   margin-top: 4vh;
+   position: relative;
+   width: 100%;
+   padding: 0.2em 1.4em;
+   margin: 2em auto;
+   color: #fff;
+   background: rgb(105, 214, 226);
+   overflow: hidden;
+}
+
+.note:before {
+   content: "";
+   position: absolute;
+   top: 0;
+   right: 0;
+   border-width: 0 16px 16px 0;
+   border-style: solid;
+   border-color: #fff #fff rgb(24, 184, 202) rgb(24, 194, 202);
+   -webkit-box-shadow: 0 1px 1px rgba(0,0,0,0.3), -1px 1px 1px rgba(0,0,0,0.2);
+   -moz-box-shadow: 0 1px 1px rgba(0,0,0,0.3), -1px 1px 1px rgba(0,0,0,0.2);
+   box-shadow: 0 1px 1px rgba(0,0,0,0.3), -1px 1px 1px rgba(0,0,0,0.2);
+   background: rgb(24, 184, 202);
+   display: block;
+   width: 0;
+}
+
+.note.rounded {
+   -moz-border-radius: 5px 0 5px 5px;
+   border-radius: 5px 0 5px 5px;
+}
+ 
+.note.rounded:before {
+   border-width: 8px;
+   border-color: #fff #fff transparent transparent;
+   -moz-border-radius: 0 0 0 5px;
+   border-radius: 0 0 0 5px;
+}
+
+.note p {
+   text-align: justify;
+   text-justify: distribute;
+   text-align-last: left;
+   color: #fff;
+   font-family: "QanelasSoft-Medium";
+}
+
+/* FONTS */
 
 * {
    font-family: "QanelasSoft-UltraLight";
