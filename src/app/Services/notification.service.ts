@@ -1,8 +1,9 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Observable, throwError } from 'rxjs';
+import { Observable, throwError, interval, Subject, BehaviorSubject } from 'rxjs';
 import { environment } from 'src/environments/environment';
-import { catchError, first } from 'rxjs/operators';
+import { catchError, first, startWith, switchMap } from 'rxjs/operators';
+import { Notification } from 'src/app/Models/Payload/Responses/Notification';
 
 
 @Injectable({
@@ -14,6 +15,12 @@ export class NotificationService
 {
    notificationsGetUrl:string = environment.apiUrl + "/notifications/current-user";
    notificationUrl:string = environment.apiUrl + "/notifications/";
+
+   // initialize notifications as BehaviorSubject with an empty array of type Notification
+   notifications = new BehaviorSubject<Notification[]>([]);
+
+   // Indicates the state of user notifications
+   hasNotifications: Subject<boolean> = new Subject<boolean>();
 
 
    constructor(private http:HttpClient) 
@@ -41,5 +48,27 @@ export class NotificationService
          })
 
       );
+   }
+
+
+   public pollNotifications(): Observable<any>
+   {
+      // Get/Poll user notifications every 5 seconds
+      return interval(5000).pipe(
+         startWith(0),
+         switchMap(() => this.getUserNotifications())
+      );
+   }
+
+
+   public setNotifications(notifications:Notification[])
+   {
+      this.notifications.next(notifications);
+   }
+
+
+   public setHasNotifications(hasNotifications:boolean)
+   {
+      this.hasNotifications.next(hasNotifications);
    }
 }

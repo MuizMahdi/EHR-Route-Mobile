@@ -2,6 +2,7 @@ import { NotificationService } from './../../../Services/notification.service';
 import { NotificationsPageResponse } from './../../../Models/Payload/Responses/NotificationsPageResponse';
 import { Notification } from 'src/app/Models/Payload/Responses/Notification';
 import { Component, OnInit } from '@angular/core';
+import { timer } from 'rxjs';
 
 
 @Component({
@@ -54,7 +55,4 @@ export class NotificationsPage implements OnInit
 
       );
    }
-
-
-   
 }
