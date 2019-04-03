@@ -10,6 +10,9 @@
       </ion-tab-button>
 
       <ion-tab-button tab="notifications">
+         <ion-badge *ngIf="numberOfNotifications>0" id="notifications-badge" color="primary">
+            {{numberOfNotifications}}
+         </ion-badge>
          <ion-icon name="notifications"></ion-icon>
       </ion-tab-button>
 

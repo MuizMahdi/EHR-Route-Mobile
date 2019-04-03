@@ -93,6 +93,8 @@ export class AppComponent
 
    getNotifications()
    {
+      console.log('GETTING NOTIFICATIONS ON APP.COMPONENT');
+      
       this.notificationService.pollNotifications().subscribe(
          response => {
 
@@ -100,6 +102,8 @@ export class AppComponent
 
             // If the user has notificaitons
             if (notifications.length > 0) {
+
+               console.log(notifications);
 
                // Set current notifications subject
                this.notificationService.setNotifications(notifications);
@@ -111,12 +115,13 @@ export class AppComponent
                if (this.isInBackground) {
                   // Show a push notification
                   this.presentToast('You have a notification');
-               }
+               }  
 
             }
             else {
-               // Clear out user notifications subject
+               // Clear out user notifications
                this.notificationService.setNotifications(null);
+               this.notificationService.setHasNotifications(false);
             }
             
          },

@@ -32,27 +32,18 @@ export class NotificationsPage implements OnInit
 
    getUserNotifications()
    {
-      this.notificationService.getUserNotifications().subscribe(
+      // On notifications change
+      this.notificationService.notifications.subscribe(notifications => {
+         if (notifications) {
+            this.notifications = notifications;
 
-         response => {
-            
-            this.notificationsResponse = response;
-
-            this.notifications = this.notificationsResponse.resources;
-            
             if (this.notifications.length == 0) {
                this.hasNewNotifications = false;
             }
             else {
                this.hasNewNotifications = true;
             }
-
-         },
-
-         error => {
-            console.log(error);
          }
-
-      );
+      });
    }
 }

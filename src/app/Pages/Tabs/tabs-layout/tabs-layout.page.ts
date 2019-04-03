@@ -1,4 +1,5 @@
-import { Component } from '@angular/core';
+import { NotificationService } from './../../../Services/notification.service';
+import { Component, OnInit } from '@angular/core';
 
 
 @Component({
@@ -8,4 +9,28 @@ import { Component } from '@angular/core';
 })
 
 
-export class TabsLayoutPage {}
+export class TabsLayoutPage implements OnInit
+{
+   numberOfNotifications:number = 0;
+
+   constructor(private notificationService:NotificationService)
+   { }
+
+
+   ngOnInit()
+   {
+      this.getNotifications();
+   }
+
+
+   getNotifications()
+   {
+      this.notificationService.notifications.subscribe(notifications => {
+         
+         if (notifications) {
+            this.numberOfNotifications = notifications.length;
+         }
+
+      });
+   }
+}
