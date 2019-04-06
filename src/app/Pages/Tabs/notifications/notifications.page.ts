@@ -1,8 +1,8 @@
+import { NotificationType } from './../../../Models/NotificationType';
 import { NotificationService } from './../../../Services/notification.service';
 import { NotificationsPageResponse } from './../../../Models/Payload/Responses/NotificationsPageResponse';
 import { Notification } from 'src/app/Models/Payload/Responses/Notification';
 import { Component, OnInit } from '@angular/core';
-import { timer } from 'rxjs';
 
 
 @Component({
@@ -45,5 +45,51 @@ export class NotificationsPage implements OnInit
             }
          }
       });
+   }
+
+
+   notificationMessageBuilder(notification:Notification): string
+   {
+      switch(notification.notificationType) {
+
+         case NotificationType.CONSENT_REQUEST: {
+            return notification.senderName + 
+            " is asking for consent to use and share your medical record";
+         }
+
+         case NotificationType.UPDATE_CONSENT_REQUEST: {
+            return notification.senderName + 
+            " is asking for consent to update your medical record";
+         }
+
+         default: { 
+            break; 
+         }
+
+      }
+   }
+
+
+   onNotificationClick(notification:Notification): void
+   {
+      switch(notification.notificationType) {
+
+         case NotificationType.CONSENT_REQUEST: {
+            // Set notification as active notification
+            this.notificationService.setActiveNotification(notification);
+            break;
+         }
+
+         case NotificationType.UPDATE_CONSENT_REQUEST: {
+             // Set notification as active notification
+            this.notificationService.setActiveNotification(notification);
+            break;
+         }
+
+         default: { 
+            break; 
+         }
+
+      }
    }
 }

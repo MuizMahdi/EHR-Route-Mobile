@@ -1,3 +1,15 @@
 <ion-content>
-   <h2>Notifications</h2>
+   <div *ngIf="!hasNewNotifications" class="empty-notifications">
+      <p>You currently have no new notifications</p>
+   </div>
+
+   <ul class="notifications-list">
+
+      <li *ngFor="let notification of notifications" class="notification-item">
+         <a (click)="onNotificationClick(notification)" href="javascript:void(0)">
+            <p>{{notificationMessageBuilder(notification)}}</p>
+         </a>
+      </li>
+
+   </ul>
 </ion-content>
