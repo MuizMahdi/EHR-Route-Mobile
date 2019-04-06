@@ -22,6 +22,9 @@ export class NotificationService
    // Indicates the state of user notifications
    hasNotifications: Subject<boolean> = new Subject<boolean>();
 
+   // The selected notification
+   activeNotification:Subject<Notification> = new Subject<Notification>();
+
 
    constructor(private http:HttpClient) 
    { }
@@ -70,5 +73,11 @@ export class NotificationService
    public setHasNotifications(hasNotifications:boolean)
    {
       this.hasNotifications.next(hasNotifications);
+   }
+
+
+   public setActiveNotification(notification:Notification)
+   {
+      this.activeNotification.next(notification);
    }
 }
