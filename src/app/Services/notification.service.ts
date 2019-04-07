@@ -22,8 +22,8 @@ export class NotificationService
    // Indicates the state of user notifications
    hasNotifications: Subject<boolean> = new Subject<boolean>();
 
-   // The selected notification
-   activeNotification:Subject<Notification> = new Subject<Notification>();
+   // The selected notification (null as default if none are selected)
+   activeNotification:BehaviorSubject<Notification> = new BehaviorSubject(null);
 
 
    constructor(private http:HttpClient) 

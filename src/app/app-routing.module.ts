@@ -8,7 +8,8 @@ const routes: Routes = [
    { path: '', loadChildren: './Pages/Tabs/tabs-layout/tabs-layout.module#TabsLayoutPageModule', canActivate:[AuthGuard]},
    { path: 'login', loadChildren: './Pages/Auth/login/login.module#LoginPageModule' },
    { path: 'register', loadChildren: './Pages/Auth/register/register.module#RegisterPageModule' },
-   { path: 'info-completion', loadChildren: './Pages/info-completion/info-completion.module#InfoCompletionPageModule'/*, canActivate:[InfoCompletionGuard]*/}
+   { path: 'info-completion', loadChildren: './Pages/info-completion/info-completion.module#InfoCompletionPageModule' /*, canActivate:[InfoCompletionGuard]*/},
+   { path: 'consent-request', loadChildren: './Pages/Notifications/consent-request/consent-request.module#ConsentRequestPageModule', canActivate:[AuthGuard]}
 ];
 
 

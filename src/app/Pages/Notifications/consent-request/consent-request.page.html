@@ -1,0 +1,32 @@
+<ion-header class="header">
+  <ion-toolbar>
+    <ion-title>consent-request</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+
+<ion-content padding>
+   <div class="boxed-element" *ngIf="notification">
+
+      <div class="info-group">
+         <div class="note-blue-side"><h4>Consent Request</h4></div>
+         <p>
+            <b>{{notification.senderName}}</b>  
+            is asking for your permission to use, and share your medical record.
+         </p>
+      </div>
+
+      <div class="info-group">
+         <div class="note-blue-side"><h4>Request Information</h4></div>
+         <p>
+            <b>{{notification.senderName}}</b> 
+            is asking for your consent to view and use your electronic health record.
+            <br><br>
+            If you choose to accept, then all of the institutions of the network will be able 
+            to access your record's data. However, they will not be able to share it with other
+            networks without your consent.
+         </p>
+      </div>
+
+   </div>
+</ion-content>
