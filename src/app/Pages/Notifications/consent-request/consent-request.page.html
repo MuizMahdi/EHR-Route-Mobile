@@ -19,13 +19,50 @@
       <div class="info-group">
          <div class="note-blue-side"><h4>Request Information</h4></div>
          <p>
-            <b>{{notification.senderName}}</b> 
+            <b>{{notification.senderName}}</b> from the 
+            <b>{{requesterNetworkDetails?.networkName}}</b> healthcare institutions network
             is asking for your consent to view and use your electronic health record.
             <br><br>
             If you choose to accept, then all of the institutions of the network will be able 
             to access your record's data. However, they will not be able to share it with other
             networks without your consent.
          </p>
+      </div>
+
+      <div class="info-group">
+         <div class="note-blue-side"><h4>Network Information</h4></div>
+
+         <p>Network's name: {{requesterNetworkDetails?.networkName}}</p>
+
+         <p>Network institutions: </p>
+         <ul>
+            <li *ngFor="let institution of requesterNetworkDetails?.networkInstitutions">
+               <a href="javascript:void(0)">
+                  {{institution}}
+               </a>
+            </li>
+         </ul>
+         <br>
+
+         <p>Network members: </p>
+         <ul>
+            <li *ngFor="let provider of requesterNetworkDetails?.networkMembers">
+               <a href="javascript:void(0)">
+                  {{provider}}
+               </a>
+            </li>
+         </ul>
+
+      </div>
+
+      <div style="margin-top:6vh;">
+         <ion-button (click)="onConsentRequestAccept()" class="button-accept" expand="block" fill="clear">
+            Accept
+         </ion-button>
+   
+         <ion-button (click)="onConsentRequestReject()" class="button-reject" expand="block" fill="clear">
+            Reject
+         </ion-button>
       </div>
 
    </div>
