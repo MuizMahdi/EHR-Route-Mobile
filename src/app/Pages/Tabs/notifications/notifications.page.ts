@@ -1,3 +1,4 @@
+import { Router } from '@angular/router';
 import { NotificationType } from './../../../Models/NotificationType';
 import { NotificationService } from './../../../Services/notification.service';
 import { NotificationsPageResponse } from './../../../Models/Payload/Responses/NotificationsPageResponse';
@@ -20,7 +21,7 @@ export class NotificationsPage implements OnInit
    notificationsResponse:NotificationsPageResponse;
 
 
-   constructor(private notificationService:NotificationService)
+   constructor(private notificationService:NotificationService, private router:Router)
    { }
 
 
@@ -75,15 +76,28 @@ export class NotificationsPage implements OnInit
       switch(notification.notificationType) {
 
          case NotificationType.CONSENT_REQUEST: {
+
+            // Navigate to the conset request info page
+            this.router.navigate(['/consent-request']);
+
+
             // Set notification as active notification
             this.notificationService.setActiveNotification(notification);
+
             break;
+
          }
 
          case NotificationType.UPDATE_CONSENT_REQUEST: {
-             // Set notification as active notification
+
+            // Set notification as active notification
             this.notificationService.setActiveNotification(notification);
+
+            // Navigate to the update consent request info page
+            this.router.navigate(['/update-consent-request']);
+
             break;
+
          }
 
          default: { 
