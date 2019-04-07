@@ -1,3 +1,6 @@
+import { ErrorResponse } from './../../../Models/Payload/Responses/ErrorResponse';
+import { NetworkDetails } from './../../../Models/Payload/Responses/NetworkDetails';
+import { NetworkService } from './../../../Services/network.service';
 import { ConsentRequest } from './../../../Models/Payload/Responses/ConsentRequest';
 import { Notification } from './../../../Models/Payload/Responses/Notification';
 import { NotificationService } from './../../../Services/notification.service';
@@ -15,9 +18,10 @@ export class ConsentRequestPage implements OnInit
 {
    notification:Notification;
    consentRequest: ConsentRequest;
+   requesterNetworkDetails: NetworkDetails;
 
 
-   constructor(private notificationService:NotificationService) 
+   constructor(private notificationService:NotificationService, private networkService:NetworkService) 
    { }
 
 
@@ -28,6 +32,24 @@ export class ConsentRequestPage implements OnInit
       if (this.notification) {
          this.consentRequest = this.notification.reference;
       }
+
+      this.getRequesterNetworkDetails(this.consentRequest.networkUUID);
+   }
+
+
+   getRequesterNetworkDetails(networkUUID:string): void
+   {
+      this.networkService.getNetworkDetails(networkUUID).subscribe(
+
+         (response:NetworkDetails) => {
+            this.requesterNetworkDetails = response;
+         },
+
+         (error:ErrorResponse) => {
+            console.log(error);
+         }
+
+      );
    }
 
 }
