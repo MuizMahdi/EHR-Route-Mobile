@@ -9,14 +9,6 @@
    <div class="boxed-element" *ngIf="notification">
 
       <div class="info-group">
-         <div class="note-blue-side"><h4>Consent Request</h4></div>
-         <p>
-            <b>{{notification.senderName}}</b>  
-            is asking for your permission to use, and share your medical record.
-         </p>
-      </div>
-
-      <div class="info-group">
          <div class="note-blue-side"><h4>Request Information</h4></div>
          <p>
             <b>{{notification.senderName}}</b> from the 
@@ -32,9 +24,10 @@
       <div class="info-group">
          <div class="note-blue-side"><h4>Network Information</h4></div>
 
-         <p>Network's name: {{requesterNetworkDetails?.networkName}}</p>
+         <p class="sub-header">Network's name: </p>
+         {{requesterNetworkDetails?.networkName}}
 
-         <p>Network institutions: </p>
+         <p class="sub-header">Network's institutions: </p>
          <ul>
             <li *ngFor="let institution of requesterNetworkDetails?.networkInstitutions">
                <a href="javascript:void(0)">
@@ -44,7 +37,7 @@
          </ul>
          <br>
 
-         <p>Network members: </p>
+         <p class="sub-header">Network's members: </p>
          <ul>
             <li *ngFor="let provider of requesterNetworkDetails?.networkMembers">
                <a href="javascript:void(0)">
@@ -56,11 +49,11 @@
       </div>
 
       <div style="margin-top:6vh;">
-         <ion-button (click)="onConsentRequestAccept()" class="button-accept" expand="block" fill="clear">
+         <ion-button (click)="onConsentRequestAccept()" class="button-accept" expand="block" fill="outline">
             Accept
          </ion-button>
    
-         <ion-button (click)="onConsentRequestReject()" class="button-reject" expand="block" fill="clear">
+         <ion-button (click)="onConsentRequestReject()" class="button-reject" expand="block" fill="outline" color="danger">
             Reject
          </ion-button>
       </div>
