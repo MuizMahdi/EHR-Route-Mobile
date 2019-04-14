@@ -5,6 +5,7 @@ import { ConsentRequest } from './../../../Models/Payload/Responses/ConsentReque
 import { Notification } from './../../../Models/Payload/Responses/Notification';
 import { NotificationService } from './../../../Services/notification.service';
 import { Component, OnInit } from '@angular/core';
+import { AlertController } from '@ionic/angular';
 
 
 @Component({
@@ -21,7 +22,10 @@ export class ConsentRequestPage implements OnInit
    requesterNetworkDetails: NetworkDetails;
 
 
-   constructor(private notificationService:NotificationService, private networkService:NetworkService) 
+   constructor(
+      private notificationService:NotificationService, public alertController: AlertController,
+      private networkService:NetworkService
+   ) 
    { }
 
 
@@ -52,4 +56,46 @@ export class ConsentRequestPage implements OnInit
       );
    }
 
+
+   async onConsentRequestReject()
+   {
+      // View an alert modal asking for confirmation
+      const alert = await this.alertController.create({
+         header: 'Confirm Rejection',
+         message: 'Are you sure that you want to reject the request?, rejected requests will be deleted.',
+         buttons: [
+            {
+               text: 'Cancel',
+               role: 'cancel',
+               cssClass: 'secondary',
+               handler: () => {
+                  console.log('Confirm Canceled');
+               }
+            }, {
+               text: 'Okay',
+               handler: () => {
+                  this.deleteNotification(); 
+               }
+            }
+         ]
+      });
+   
+      await alert.present();
+   }
+
+
+   deleteNotification(): void
+   {
+      this.notificationService.deleteNotification(this.notification.notificationID).subscribe( 
+
+         response => {
+            console.log(response);
+         },
+
+         error => {
+            console.log(error);
+         }
+
+      );
+   }
 }
