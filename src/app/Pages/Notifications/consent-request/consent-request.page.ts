@@ -1,3 +1,4 @@
+import { Router } from '@angular/router';
 import { ErrorResponse } from './../../../Models/Payload/Responses/ErrorResponse';
 import { NetworkDetails } from './../../../Models/Payload/Responses/NetworkDetails';
 import { NetworkService } from './../../../Services/network.service';
@@ -24,7 +25,7 @@ export class ConsentRequestPage implements OnInit
 
    constructor(
       private notificationService:NotificationService, public alertController: AlertController,
-      private networkService:NetworkService
+      private networkService:NetworkService, private router:Router
    ) 
    { }
 
@@ -97,5 +98,11 @@ export class ConsentRequestPage implements OnInit
          }
 
       );
+   }
+
+
+   navigateBack() {
+      // Navigate back to main tabs
+      this.router.navigate(['']);
    }
 }
