@@ -50,4 +50,4 @@ import { JwtInterceptor } from './Helpers/Interceptors/JwtInterceptor';
 })
 
 
-export class AppModule {}
+export class AppModule { }

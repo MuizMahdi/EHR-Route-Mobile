@@ -1,3 +1,10 @@
+import { PatientInfo } from './../../../Models/Payload/Requests/PatientInfo';
+import { EhrPatientInfo } from './../../../Entities/EhrPatientInfo';
+import { UserDataService } from './../../../Services/user-data.service';
+import { Address } from './../../../Entities/Address';
+import { TransactionService } from './../../../Services/transaction.service';
+import { UserConsentResponse } from './../../../Models/Payload/Responses/UserConsentResponse';
+import { AuthService } from './../../../Services/auth.service';
 import { Router } from '@angular/router';
 import { ErrorResponse } from './../../../Models/Payload/Responses/ErrorResponse';
 import { NetworkDetails } from './../../../Models/Payload/Responses/NetworkDetails';
@@ -7,12 +14,13 @@ import { Notification } from './../../../Models/Payload/Responses/Notification';
 import { NotificationService } from './../../../Services/notification.service';
 import { Component, OnInit } from '@angular/core';
 import { AlertController } from '@ionic/angular';
+import ModelMapper from 'src/app/Helpers/Utils/ModelMapper';
 
 
 @Component({
-  selector: 'app-consent-request',
-  templateUrl: './consent-request.page.html',
-  styleUrls: ['./consent-request.page.scss'],
+   selector: 'app-consent-request',
+   templateUrl: './consent-request.page.html',
+   styleUrls: ['./consent-request.page.scss'],
 })
 
 
@@ -24,8 +32,10 @@ export class ConsentRequestPage implements OnInit
 
 
    constructor(
-      private notificationService:NotificationService, public alertController: AlertController,
-      private networkService:NetworkService, private router:Router
+      private notificationService:NotificationService, private authService:AuthService,
+      private networkService:NetworkService, public alertController: AlertController,
+      private transactionService:TransactionService, private router:Router,
+      private userDataService:UserDataService
    ) 
    { }
 
@@ -58,6 +68,65 @@ export class ConsentRequestPage implements OnInit
    }
 
 
+   async onConsentRequestAccept()
+   {
+      // Construct a UserConsentResponse using user's data
+      let consentResponse:UserConsentResponse = await this.constructUserConsentResponse();
+
+      // Send the consent response
+      this.transactionService.sendUserEhrConsentResponse(consentResponse).subscribe(
+
+         response => {
+
+            console.log(response);
+
+            // TODO: Un-comment notification deletion upon process success TODO:
+            // Delete notification
+            //this.deleteNotification();
+
+         },
+
+         error => {
+            console.log(error);
+         }
+
+      );
+
+      
+   }
+
+
+   async constructUserConsentResponse(): Promise<UserConsentResponse>
+   {
+      // Get current user ID
+      let userID: number = this.authService.getCurrentUser().id;
+
+      // Get user's address (also private key) from DB
+      let userAddress:Address = await this.userDataService.getUserAddress();
+
+      // Get user's info from DB
+      let ehrPatientInfo:EhrPatientInfo = await this.userDataService.getEhrUserInfo();
+
+      // Add user info into the Block in the ConsentRequest
+      if (this.consentRequest) {
+         let patientInfo:PatientInfo = ModelMapper.mapEhrPatientInfoToPatientInfo(ehrPatientInfo, userID);
+         this.consentRequest.block.transaction.record.patientInfo = patientInfo;
+      }
+
+      // Construct a UserConsentResponse object
+      let userConsentResponse:UserConsentResponse = {
+         block: this.consentRequest.block,
+         userPrivateKey: userAddress.privateKey,
+         userAddress: userAddress.address,
+         providerUUID: this.consentRequest.providerUUID,
+         networkUUID: this.consentRequest.networkUUID,
+         userID: userID
+      }
+
+      return userConsentResponse;
+   }
+
+
    async onConsentRequestReject()
    {
       // View an alert modal asking for confirmation
@@ -80,7 +149,7 @@ export class ConsentRequestPage implements OnInit
             }
          ]
       });
-   
+
       await alert.present();
    }
 
