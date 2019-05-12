@@ -17,6 +17,7 @@ export default class ModelMapper
       return address;
    }
 
+
    public static mapPatientInfoToEhrPatientInfo(patientInfo:PatientInfo): EhrPatientInfo
    {
       const ehrPatientInfo = new EhrPatientInfo();
@@ -32,5 +33,23 @@ export default class ModelMapper
       ehrPatientInfo.userID = patientInfo.userID;
 
       return ehrPatientInfo;
+   }
+
+   
+   public static mapEhrPatientInfoToPatientInfo(ehrPatientInfo:EhrPatientInfo, userId:number): PatientInfo
+   {
+      const patientInfo:PatientInfo = {
+         name: ehrPatientInfo.name,
+         gender: ehrPatientInfo.gender,
+         country: ehrPatientInfo.country,
+         city: ehrPatientInfo.city,
+         address: ehrPatientInfo.address,
+         phone: ehrPatientInfo.phone,
+         birthDate: ehrPatientInfo.birthDate,
+         email: ehrPatientInfo.email,
+         userID: userId
+      }
+
+      return patientInfo;
    }
 }
