@@ -113,7 +113,7 @@ export class AuthService
    {
       // Save the JWT in local storage
       if (token && token.accessToken) {
-         localStorage.setItem('accessToken', token.accessToken)
+         localStorage.setItem('accessToken', token.accessToken);
       }
 
       // Save user's info in local storage

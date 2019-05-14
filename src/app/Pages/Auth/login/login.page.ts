@@ -91,6 +91,10 @@ export class LoginPage implements OnInit
             // Navigate to the information completion page
             this.router.navigate(['/info-completion']);
          }
+         else {
+            // Navigate to main tabs
+            this.router.navigate(['']);
+         }
 
       });
    }
