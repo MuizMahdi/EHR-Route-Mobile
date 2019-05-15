@@ -1,10 +1,11 @@
-import { ErrorResponse } from 'src/app/Models/Payload/Responses/ErrorResponse';
+import { ErrorResponse } from './Models/Payload/Responses/ErrorResponse';
+import { ApplicationService } from './Services/application.service';
 import { Toast } from '@ionic-native/toast/ngx';
 import { NotificationService } from './Services/notification.service';
 import { EhrPatientInfo } from './Entities/EhrPatientInfo';
 import { Address } from './Entities/Address';
-import { Component } from '@angular/core';
-import { Platform, ToastController } from '@ionic/angular';
+import { Component, OnInit } from '@angular/core';
+import { Platform } from '@ionic/angular';
 import { SplashScreen } from '@ionic-native/splash-screen/ngx';
 import { StatusBar } from '@ionic-native/status-bar/ngx';
 import { Notification } from 'src/app/Models/Payload/Responses/Notification';
@@ -12,21 +13,21 @@ import { createConnection } from 'typeorm'
 
 
 @Component({
-  selector: 'app-root',
-  templateUrl: 'app.component.html'
+   selector: 'app-root',
+   templateUrl: 'app.component.html'
 })
 
 
-export class AppComponent 
+export class AppComponent implements OnInit
 {
-   isInBackground:boolean = false;
-
-
    constructor(
-      private platform: Platform, private splashScreen: SplashScreen,
+      private platform: Platform, private toast:Toast,
+      private appService:ApplicationService, private splashScreen: SplashScreen,
       private statusBar: StatusBar, private notificationService:NotificationService,
-      public toastController:ToastController, private toast:Toast
-   ) {
+   ) { }
+
+
+   ngOnInit() {
       this.initializeApp();
       this.initializeDatabase();
    }
@@ -41,12 +42,20 @@ export class AppComponent
 
          // When app is closed (on background)
          this.platform.pause.subscribe(() => {
-            this.isInBackground = true;
+            // If app is set as not on background
+            if (!this.appService.getIsOnBackground) {
+               // Set it as on background
+               this.appService.setIsOnBackground(true);
+            }
          });
 
          // When app is open (on foreground)
          this.platform.resume.subscribe(() => {
-            this.isInBackground = false;
+            // If app is set as on background
+            if (this.appService.getIsOnBackground) {
+               // Set as not
+               this.appService.setIsOnBackground(false);
+            }
          });
 
       });
@@ -93,8 +102,6 @@ export class AppComponent
 
    getNotifications()
    {
-      console.log('GETTING NOTIFICATIONS ON APP.COMPONENT');
-      
       this.notificationService.pollNotifications().subscribe(
          response => {
 
@@ -103,8 +110,6 @@ export class AppComponent
             // If the user has notificaitons
             if (notifications.length > 0) {
 
-               console.log(notifications);
-
                // Set current notifications subject
                this.notificationService.setNotifications(notifications);
 
@@ -112,9 +117,9 @@ export class AppComponent
                this.notificationService.setHasNotifications(true);
 
                // If app is in background
-               if (this.isInBackground) {
+               if (this.appService.getIsOnBackground) {
                   // Show a push notification
-                  this.presentToast('You have a notification');
+                  this.appService.presentToast('You have a notification');
                }  
 
             }
@@ -130,16 +135,6 @@ export class AppComponent
             this.toast.show(error.message, '2000', 'bottom').subscribe();
          }
       );
-   }
-
-
-
-   private async presentToast(message) {
-      const toast = await this.toastController.create({
-        message,
-        duration: 4000
-      });
-      toast.present();
    }
 
 }
