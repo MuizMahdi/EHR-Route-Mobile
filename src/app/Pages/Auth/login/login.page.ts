@@ -1,3 +1,6 @@
+import { ApplicationService } from './../../../Services/application.service';
+import { Notification } from './../../../Models/Payload/Responses/Notification';
+import { NotificationService } from './../../../Services/notification.service';
 import { Toast } from '@ionic-native/toast/ngx';
 import { ErrorResponse } from './../../../Models/Payload/Responses/ErrorResponse';
 import { AddressResponse } from './../../../Models/Payload/Responses/AddressResponse';
@@ -27,34 +30,34 @@ export class LoginPage implements OnInit
 
 
    constructor(
-      private router:Router, private authService:AuthService,
-      private addressService:AddressService, private toast:Toast
+      private router: Router, private appService: ApplicationService,
+      private notificationService: NotificationService, private toast: Toast,
+      private addressService: AddressService, private authService: AuthService
    ) { }
 
 
-   ngOnInit() 
-   { 
+   ngOnInit() { 
       this.buildForm();
    }
 
 
-   toRegistration(): void
-   {
+   toRegistration(): void {
       this.router.navigate(['/register']);
    }
 
 
-   private buildForm(): void
-   {
+   private buildForm(): void {
+
       this.loginFormGroup = new FormGroup({
          usernameOrEmailCtrl: new FormControl(null, [Validators.required]),
          passwordCtrl: new FormControl(null, Validators.required)
       });
+
    }
 
 
-   onLogin()
-   {
+   onLogin() {
+
       // LoginFormGroup values
       this.loginUsernameOrEmail = this.loginFormGroup.get("usernameOrEmailCtrl").value;
       this.loginPassword = this.loginFormGroup.get("passwordCtrl").value;
@@ -67,7 +70,6 @@ export class LoginPage implements OnInit
 
       // Send a login request
       this.authService.login(userInfo).pipe(first()).subscribe(
-
          response => {
 
             // Check if user has added their info
@@ -76,8 +78,12 @@ export class LoginPage implements OnInit
             // Check if its the user's first login
             this.checkIfFirstLogin();
 
+            // Get user's notifications
+            this.getUserNotifications();
+
          }
       );
+
    }
 
 
@@ -140,6 +146,44 @@ export class LoginPage implements OnInit
             }
          }
 
+      );
+   }
+
+
+   getUserNotifications()
+   {
+      this.notificationService.pollNotifications().subscribe(
+         response => {
+
+            let notifications: Notification[] = response.resources;
+
+            // If the user has notificaitons
+            if (notifications.length > 0) {
+
+               // Set current notifications subject
+               this.notificationService.setNotifications(notifications);
+
+               // Set notifications status as true
+               this.notificationService.setHasNotifications(true);
+
+               // If app is in background
+               if (this.appService.getIsOnBackground()) {
+                  // Show a push notification
+                  this.appService.presentToast('Check your EHRoute notifications');
+               }
+
+            }
+            else {
+               // Clear out user notifications
+               this.notificationService.setNotifications(null);
+               this.notificationService.setHasNotifications(false);
+            }
+            
+         },
+
+         (error:ErrorResponse) => {
+            this.toast.show(error.message, '2000', 'bottom').subscribe();
+         }
       );
    }
 }

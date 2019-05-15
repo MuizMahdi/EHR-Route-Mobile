@@ -7,7 +7,7 @@ import { Notification } from 'src/app/Models/Payload/Responses/Notification';
 
 
 @Injectable({
-  providedIn: 'root'
+   providedIn: 'root'
 })
 
 
@@ -30,8 +30,8 @@ export class NotificationService
    { }
 
 
-   getUserNotifications(): Observable<any>
-   {
+   getUserNotifications(): Observable<any> {
+
       return this.http.get(this.notificationsGetUrl).pipe(
 
          catchError(error => {
@@ -39,11 +39,12 @@ export class NotificationService
          })
 
       );
+
    }
 
 
-   deleteNotification(notificationID:number): Observable<any>
-   {
+   deleteNotification(notificationID:number): Observable<any> {
+
       return this.http.delete(this.notificationUrl + notificationID).pipe(first(),
       
          catchError(error => {
@@ -51,33 +52,32 @@ export class NotificationService
          })
 
       );
+
    }
 
 
-   public pollNotifications(): Observable<any>
-   {
+   public pollNotifications(): Observable<any> {
+
       // Get/Poll user notifications every 5 seconds
       return interval(5000).pipe(
          startWith(0),
          switchMap(() => this.getUserNotifications())
       );
+
    }
 
 
-   public setNotifications(notifications:Notification[])
-   {
+   public setNotifications(notifications:Notification[]) {
       this.notifications.next(notifications);
    }
 
 
-   public setHasNotifications(hasNotifications:boolean)
-   {
+   public setHasNotifications(hasNotifications:boolean) {
       this.hasNotifications.next(hasNotifications);
    }
 
 
-   public setActiveNotification(notification:Notification)
-   {
+   public setActiveNotification(notification:Notification) {
       this.activeNotification.next(notification);
    }
 }
