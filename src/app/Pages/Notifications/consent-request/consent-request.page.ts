@@ -1,3 +1,4 @@
+import { ApplicationService } from './../../../Services/application.service';
 import { PatientInfo } from './../../../Models/Payload/Requests/PatientInfo';
 import { EhrPatientInfo } from './../../../Entities/EhrPatientInfo';
 import { UserDataService } from './../../../Services/user-data.service';
@@ -13,7 +14,7 @@ import { ConsentRequest } from './../../../Models/Payload/Responses/ConsentReque
 import { Notification } from './../../../Models/Payload/Responses/Notification';
 import { NotificationService } from './../../../Services/notification.service';
 import { Component, OnInit } from '@angular/core';
-import { AlertController } from '@ionic/angular';
+import { AlertController, ToastController } from '@ionic/angular';
 import ModelMapper from 'src/app/Helpers/Utils/ModelMapper';
 
 
@@ -32,16 +33,15 @@ export class ConsentRequestPage implements OnInit
 
 
    constructor(
-      private notificationService:NotificationService, private authService:AuthService,
-      private networkService:NetworkService, public alertController: AlertController,
-      private transactionService:TransactionService, private router:Router,
-      private userDataService:UserDataService
+      private notificationService: NotificationService, private authService: AuthService,
+      private networkService: NetworkService, public alertController: AlertController,
+      private transactionService:TransactionService, private appService:ApplicationService,
+      private userDataService: UserDataService, public toastController: ToastController
    ) 
    { }
 
 
-   ngOnInit() 
-   {
+   ngOnInit() {
       this.notification = this.notificationService.activeNotification.getValue();
       
       if (this.notification) {
@@ -52,8 +52,8 @@ export class ConsentRequestPage implements OnInit
    }
 
 
-   getRequesterNetworkDetails(networkUUID:string): void
-   {
+   getRequesterNetworkDetails(networkUUID:string): void {
+
       this.networkService.getNetworkDetails(networkUUID).subscribe(
 
          (response:NetworkDetails) => {
@@ -65,11 +65,12 @@ export class ConsentRequestPage implements OnInit
          }
 
       );
+
    }
 
 
-   async onConsentRequestAccept()
-   {
+   async onConsentRequestAccept() {
+
       // Construct a UserConsentResponse using user's data
       let consentResponse:UserConsentResponse = await this.constructUserConsentResponse();
 
@@ -77,13 +78,8 @@ export class ConsentRequestPage implements OnInit
       this.transactionService.sendUserEhrConsentResponse(consentResponse).subscribe(
 
          response => {
-
             console.log(response);
-
-            // TODO: Un-comment notification deletion upon process success TODO:
-            // Delete notification
-            //this.deleteNotification();
-
+            this.deleteNotification();
          },
 
          error => {
@@ -92,12 +88,11 @@ export class ConsentRequestPage implements OnInit
 
       );
 
-      
    }
 
 
-   async constructUserConsentResponse(): Promise<UserConsentResponse>
-   {
+   async constructUserConsentResponse(): Promise<UserConsentResponse> {
+
       // Get current user ID
       let userID: number = this.authService.getCurrentUser().id;
 
@@ -124,11 +119,12 @@ export class ConsentRequestPage implements OnInit
       }
 
       return userConsentResponse;
+
    }
 
 
-   async onConsentRequestReject()
-   {
+   async onConsentRequestReject() {
+
       // View an alert modal asking for confirmation
       const alert = await this.alertController.create({
          header: 'Confirm Rejection',
@@ -151,11 +147,12 @@ export class ConsentRequestPage implements OnInit
       });
 
       await alert.present();
+
    }
 
 
-   deleteNotification(): void
-   {
+   deleteNotification(): void {
+
       this.notificationService.deleteNotification(this.notification.notificationID).subscribe( 
 
          response => {
@@ -167,11 +164,12 @@ export class ConsentRequestPage implements OnInit
          }
 
       );
+
    }
 
 
    navigateBack() {
       // Navigate back to main tabs
-      this.router.navigate(['']);
+      this.appService.navigateToTabs();
    }
 }

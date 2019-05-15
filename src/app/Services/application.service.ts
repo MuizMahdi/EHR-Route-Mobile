@@ -1,3 +1,4 @@
+import { Router } from '@angular/router';
 import { ToastController } from '@ionic/angular';
 import { BehaviorSubject } from 'rxjs';
 import { Injectable } from '@angular/core';
@@ -14,8 +15,14 @@ export class ApplicationService
    isOnBackground: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
 
 
-   constructor(public toastController:ToastController) 
+   constructor(public toastController:ToastController, private router:Router) 
    { }
+
+
+   navigateToTabs() {
+      // Navigate back to main tabs page
+      this.router.navigate(['']);
+   }
 
 
    public async presentToast(message) {
