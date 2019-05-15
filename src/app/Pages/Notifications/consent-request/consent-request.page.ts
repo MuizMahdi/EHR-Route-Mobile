@@ -1,3 +1,4 @@
+import { ApiResponse } from './../../../Models/Payload/Responses/ApiResponse';
 import { ApplicationService } from './../../../Services/application.service';
 import { PatientInfo } from './../../../Models/Payload/Requests/PatientInfo';
 import { EhrPatientInfo } from './../../../Entities/EhrPatientInfo';
@@ -77,8 +78,8 @@ export class ConsentRequestPage implements OnInit
       // Send the consent response
       this.transactionService.sendUserEhrConsentResponse(consentResponse).subscribe(
 
-         response => {
-            console.log(response);
+         (response: ApiResponse) => {
+            this.appService.presentToast(response.message);
             this.deleteNotification();
          },
 

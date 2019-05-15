@@ -28,7 +28,7 @@ export class ApplicationService
    public async presentToast(message) {
       const toast = await this.toastController.create({
         message,
-        duration: 4000
+        duration: 10000
       });
       toast.present();
    }
