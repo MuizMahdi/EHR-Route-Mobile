@@ -12,10 +12,12 @@
 /* UI ELEMENTS */
 	
 .toast {
-   --background: rgb(131, 136, 216);
+   --background: rgb(111, 169, 255);
+   color: #fff;
+   font-weight: bold;
    --color:rgb(255, 255, 255);
    --button-color: rgb(255, 255, 255);
-   --border-radius: 15px 50px;
+   --border-radius: 15px;
 }
 
 .boxed-element {

@@ -1,3 +1,4 @@
+import { ApplicationService } from './../../Services/application.service';
 import { Router } from '@angular/router';
 import { UserService } from './../../Services/user.service';
 import { PatientInfoService } from './../../Services/patient-info.service';
@@ -33,7 +34,7 @@ export class InfoCompletionPage implements OnInit
    constructor(
       private authService:AuthService, private patientInfoService:PatientInfoService,
       public loadingController:LoadingController, private locationService:LocationService,
-      private userService:UserService, private router:Router
+      private userService:UserService, private router:Router, private appService:ApplicationService
    ) { }
 
 
@@ -87,17 +88,21 @@ export class InfoCompletionPage implements OnInit
    }
    
 
-   private getPatientInfo(): PatientInfo
+   getPatientInfo(): PatientInfo
    {
       // Get current user's data
-      let userEmail = this.authService.getCurrentUser().email;
-      let userID = this.authService.getCurrentUser().id;
+      let currentUser = this.authService.getCurrentUser();
+      let userEmail = currentUser.email;
+      let userID = currentUser.id;
+
+      // Get user's birth date in milliseconds
+      let birthDateInMs = new Date(this.userInfoForm.get("birthCtrl").value).getTime();
 
       // Construct a PatientInfo object using form data
       let userInfo:PatientInfo = {
          name: this.userInfoForm.get("nameCtrl").value,
          gender: this.userInfoForm.get("genderSelectCtrl").value,
-         birthDate: this.userInfoForm.get("birthCtrl").value.getTime(),
+         birthDate: birthDateInMs,
          phone: this.userInfoForm.get("phoneCtrl").value,
          country: this.userInfoForm.get("countryCtrl").value.trim(),
          city: this.userInfoForm.get("cityCtrl").value.trim(),
@@ -110,7 +115,7 @@ export class InfoCompletionPage implements OnInit
    }
 
 
-   private async onUserInfoSubmit()
+   async onUserInfoSubmit()
    {
       // Construct EhrPatientInfo object from form data
       let pateintInfo = this.getPatientInfo();
