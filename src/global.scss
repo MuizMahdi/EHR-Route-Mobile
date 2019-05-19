@@ -10,6 +10,13 @@
 
 
 /* UI ELEMENTS */
+	
+.toast {
+   --background: rgb(131, 136, 216);
+   --color:rgb(255, 255, 255);
+   --button-color: rgb(255, 255, 255);
+   --border-radius: 15px 50px;
+}
 
 .boxed-element {
    position: relative;

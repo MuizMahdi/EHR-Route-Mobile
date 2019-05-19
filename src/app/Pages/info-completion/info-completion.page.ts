@@ -97,7 +97,7 @@ export class InfoCompletionPage implements OnInit
       let userInfo:PatientInfo = {
          name: this.userInfoForm.get("nameCtrl").value,
          gender: this.userInfoForm.get("genderSelectCtrl").value,
-         birthDate: this.userInfoForm.get("birthCtrl").value,
+         birthDate: this.userInfoForm.get("birthCtrl").value.getTime(),
          phone: this.userInfoForm.get("phoneCtrl").value,
          country: this.userInfoForm.get("countryCtrl").value.trim(),
          city: this.userInfoForm.get("cityCtrl").value.trim(),

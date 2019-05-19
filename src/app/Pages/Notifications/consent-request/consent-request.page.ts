@@ -37,7 +37,7 @@ export class ConsentRequestPage implements OnInit
       private notificationService: NotificationService, private authService: AuthService,
       private networkService: NetworkService, public alertController: AlertController,
       private transactionService:TransactionService, private appService:ApplicationService,
-      private userDataService: UserDataService, public toastController: ToastController
+      private userDataService: UserDataService
    ) 
    { }
 
@@ -72,54 +72,65 @@ export class ConsentRequestPage implements OnInit
 
    async onConsentRequestAccept() {
 
-      // Construct a UserConsentResponse using user's data
-      let consentResponse:UserConsentResponse = await this.constructUserConsentResponse();
+      await this.constructUserConsentResponse()
+      .then(consentResponse => {
 
-      // Send the consent response
-      this.transactionService.sendUserEhrConsentResponse(consentResponse).subscribe(
+         // Send the consent response
+         this.transactionService.sendUserEhrConsentResponse(consentResponse).subscribe(
 
-         (response: ApiResponse) => {
-            this.appService.presentToast(response.message);
-            this.deleteNotification();
-         },
+            (response: ApiResponse) => {
+               this.appService.presentToast(response.message);
+               this.deleteNotification();
+            },
 
-         error => {
-            console.log(error);
-         }
+            error => {
+               this.appService.presentToast(error);
+            }
 
-      );
+         );
 
+      })
+      .catch(error => {
+         this.appService.presentToast(error);
+      })
+      
    }
 
 
    async constructUserConsentResponse(): Promise<UserConsentResponse> {
 
-      // Get current user ID
-      let userID: number = this.authService.getCurrentUser().id;
+      return new Promise<UserConsentResponse>(async (resolve,reject) => {
 
-      // Get user's address (also private key) from DB
-      let userAddress:Address = await this.userDataService.getUserAddress();
+         if (!this.consentRequest) {
+            reject(Error('Invalid consent request contents'));
+         }
 
-      // Get user's info from DB
-      let ehrPatientInfo:EhrPatientInfo = await this.userDataService.getEhrUserInfo();
+         // Get current user ID
+         let userID: number = this.authService.getCurrentUser().id;
 
-      // Add user info into the Block in the ConsentRequest
-      if (this.consentRequest) {
+         // Get user's address (also private key) from DB
+         let userAddress:Address = await this.userDataService.getUserAddress();
+
+         // Get user's info from DB
+         let ehrPatientInfo:EhrPatientInfo = await this.userDataService.getEhrUserInfo();
+
+         // Add user info into the Block in the ConsentRequest
          let patientInfo:PatientInfo = ModelMapper.mapEhrPatientInfoToPatientInfo(ehrPatientInfo, userID);
          this.consentRequest.block.transaction.record.patientInfo = patientInfo;
-      }
+         
+         // Construct a UserConsentResponse object
+         let userConsentResponse: UserConsentResponse = {
+            block: this.consentRequest.block,
+            userPrivateKey: userAddress.privateKey,
+            userAddress: userAddress.address,
+            providerUUID: this.consentRequest.providerUUID,
+            networkUUID: this.consentRequest.networkUUID,
+            userID: userID
+         }
 
-      // Construct a UserConsentResponse object
-      let userConsentResponse:UserConsentResponse = {
-         block: this.consentRequest.block,
-         userPrivateKey: userAddress.privateKey,
-         userAddress: userAddress.address,
-         providerUUID: this.consentRequest.providerUUID,
-         networkUUID: this.consentRequest.networkUUID,
-         userID: userID
-      }
+         resolve(userConsentResponse);
 
-      return userConsentResponse;
+      });
 
    }
 
@@ -173,4 +184,16 @@ export class ConsentRequestPage implements OnInit
       // Navigate back to main tabs
       this.appService.navigateToTabs();
    }
+
+
+   async test() {
+      let consentResponse:any = await this.constructUserConsentResponse()
+      .then(
+         val => document.getElementById("text").innerHTML = JSON.stringify(val)
+      )
+      .catch(
+         err => document.getElementById("text").innerHTML = JSON.stringify(err)
+      );
+   }
+   
 }

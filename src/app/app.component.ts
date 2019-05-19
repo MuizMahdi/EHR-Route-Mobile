@@ -62,32 +62,14 @@ export class AppComponent implements OnInit
 
    async initializeDatabase()
    {
-      // Depending on the machine the app is running on,
-      // configure different database connections
-
-      // Running on device or emulator
+      // configure database connection
       if(this.platform.is('cordova')) 
       {
          await createConnection({
             type: 'cordova',
-            database: 'test',
+            database: 'user_data',
             location: 'default',
-            logging: ['error', 'query', 'schema'],
-            synchronize: true,
-            entities: [
-               Address,
-               EhrPatientInfo
-            ]
-         });
-      }
-      else 
-      {
-         // Running in browser
-         await createConnection({
-            type: 'sqljs',
-            autoSave: true,
-            location: 'browser',
-            logging: ['error', 'query', 'schema'],
+            logging: true,
             synchronize: true,
             entities: [
                Address,

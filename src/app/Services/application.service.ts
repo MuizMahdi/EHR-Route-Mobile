@@ -15,22 +15,31 @@ export class ApplicationService
    isOnBackground: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
 
 
-   constructor(public toastController:ToastController, private router:Router) 
+   constructor(
+      public toastController:ToastController, private router:Router
+   ) 
    { }
 
 
-   navigateToTabs() {
+   public navigateToTabs() {
       // Navigate back to main tabs page
       this.router.navigate(['']);
    }
 
 
    public async presentToast(message) {
+
       const toast = await this.toastController.create({
         message,
-        duration: 10000
+        duration: 10000,
+        position: 'bottom',
+        closeButtonText: 'Yeah',
+        cssClass: 'toast',
+        animated: true
       });
+
       toast.present();
+      
    }
 
 
