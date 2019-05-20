@@ -35,9 +35,12 @@ export class NotificationsPage implements OnInit
    {
       // On notifications change
       this.notificationService.notifications.subscribe(notifications => {
+
+         // Check if notifications exist
          if (notifications) {
             this.notifications = notifications;
 
+            // Check notifications length
             if (this.notifications.length == 0) {
                this.hasNewNotifications = false;
             }
@@ -45,6 +48,10 @@ export class NotificationsPage implements OnInit
                this.hasNewNotifications = true;
             }
          }
+         else {
+            this.hasNewNotifications = false;
+         }
+         
       });
    }
 

@@ -30,6 +30,9 @@ export class TabsLayoutPage implements OnInit
          if (notifications) {
             this.numberOfNotifications = notifications.length;
          }
+         else {
+            this.numberOfNotifications = 0;
+         }
 
       });
    }

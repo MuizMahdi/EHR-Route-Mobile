@@ -1,4 +1,3 @@
-import { ApplicationService } from './../../Services/application.service';
 import { Router } from '@angular/router';
 import { UserService } from './../../Services/user.service';
 import { PatientInfoService } from './../../Services/patient-info.service';
@@ -34,7 +33,7 @@ export class InfoCompletionPage implements OnInit
    constructor(
       private authService:AuthService, private patientInfoService:PatientInfoService,
       public loadingController:LoadingController, private locationService:LocationService,
-      private userService:UserService, private router:Router, private appService:ApplicationService
+      private userService:UserService, private router:Router
    ) { }
 
 
@@ -67,7 +66,7 @@ export class InfoCompletionPage implements OnInit
    }
 
 
-   private async onCountrySelect(country:string)
+   async onCountrySelect(country:string)
    {
       // Show a loading spinner while fetching the country's cities
       const citiesLoading = await this.loadingController.create({

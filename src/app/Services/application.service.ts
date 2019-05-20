@@ -23,19 +23,20 @@ export class ApplicationService
 
    public navigateToTabs() {
       // Navigate back to main tabs page
-      this.router.navigate(['']);
+      return this.router.navigate(['']);
    }
 
 
    public async presentToast(message) {
 
       const toast = await this.toastController.create({
-        message,
-        duration: 10000,
-        position: 'bottom',
-        closeButtonText: 'Yeah',
-        cssClass: 'toast',
-        animated: true
+         message,
+         duration: 5000,
+         position: 'bottom',
+         showCloseButton: true,
+         closeButtonText: 'OK',
+         cssClass: 'toast',
+         animated: true
       });
 
       toast.present();

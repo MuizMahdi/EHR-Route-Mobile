@@ -1,9 +1,9 @@
 <ion-content>
    <div *ngIf="!hasNewNotifications" class="empty-notifications">
-      <p>You currently have no new notifications</p>
+      <p>You have no notifications</p>
    </div>
 
-   <ul class="notifications-list">
+   <ul *ngIf="hasNewNotifications" class="notifications-list">
 
       <li *ngFor="let notification of notifications" class="notification-item">
          <a (click)="onNotificationClick(notification)" href="javascript:void(0)">

@@ -7,7 +7,6 @@ import { Address } from './../../../Entities/Address';
 import { TransactionService } from './../../../Services/transaction.service';
 import { UserConsentResponse } from './../../../Models/Payload/Responses/UserConsentResponse';
 import { AuthService } from './../../../Services/auth.service';
-import { Router } from '@angular/router';
 import { ErrorResponse } from './../../../Models/Payload/Responses/ErrorResponse';
 import { NetworkDetails } from './../../../Models/Payload/Responses/NetworkDetails';
 import { NetworkService } from './../../../Services/network.service';
@@ -15,8 +14,9 @@ import { ConsentRequest } from './../../../Models/Payload/Responses/ConsentReque
 import { Notification } from './../../../Models/Payload/Responses/Notification';
 import { NotificationService } from './../../../Services/notification.service';
 import { Component, OnInit } from '@angular/core';
-import { AlertController, ToastController } from '@ionic/angular';
+import { AlertController } from '@ionic/angular';
 import ModelMapper from 'src/app/Helpers/Utils/ModelMapper';
+import { first } from 'rxjs/operators';
 
 
 @Component({
@@ -78,20 +78,23 @@ export class ConsentRequestPage implements OnInit
          // Send the consent response
          this.transactionService.sendUserEhrConsentResponse(consentResponse).subscribe(
 
-            (response: ApiResponse) => {
+            async (response: ApiResponse) => {
+
+               await this.deleteNotification();
+               await this.appService.navigateToTabs();
                this.appService.presentToast(response.message);
-               this.deleteNotification();
+              
             },
 
-            error => {
-               this.appService.presentToast(error);
+            (error: ErrorResponse) => {
+               this.appService.presentToast(error.message);
             }
 
          );
 
       })
-      .catch(error => {
-         this.appService.presentToast(error);
+      .catch((error: ErrorResponse) => {
+         this.appService.presentToast(error.message);
       })
       
    }
@@ -163,19 +166,11 @@ export class ConsentRequestPage implements OnInit
    }
 
 
-   deleteNotification(): void {
+   private deleteNotification(): Promise<any> {
 
-      this.notificationService.deleteNotification(this.notification.notificationID).subscribe( 
-
-         response => {
-            console.log(response);
-         },
-
-         error => {
-            console.log(error);
-         }
-
-      );
+      return this.notificationService.deleteNotification(this.notification.notificationID)
+      .pipe(first())
+      .toPromise();
 
    }
 
@@ -184,16 +179,4 @@ export class ConsentRequestPage implements OnInit
       // Navigate back to main tabs
       this.appService.navigateToTabs();
    }
-
-
-   async test() {
-      let consentResponse:any = await this.constructUserConsentResponse()
-      .then(
-         val => document.getElementById("text").innerHTML = JSON.stringify(val)
-      )
-      .catch(
-         err => document.getElementById("text").innerHTML = JSON.stringify(err)
-      );
-   }
-   
 }
