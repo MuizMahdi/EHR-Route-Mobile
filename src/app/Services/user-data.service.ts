@@ -1,3 +1,4 @@
+import { AuthService } from './auth.service';
 import { getRepository, Repository } from 'typeorm';
 import { EhrPatientInfo } from './../Entities/EhrPatientInfo';
 import { Injectable } from '@angular/core';
@@ -11,7 +12,7 @@ import { Address } from '../Entities/Address';
 
 export class UserDataService 
 {
-   constructor() 
+   constructor(private authService: AuthService) 
    { }
 
 
@@ -27,10 +28,16 @@ export class UserDataService
 
    async getEhrUserInfo(): Promise<EhrPatientInfo>
    {
+      let currentUserId = this.authService.getCurrentUser().id;
+
       // Get EhrPatientInfo repository
       const patientInfoRepository = getRepository('EhrPatientInfo') as Repository<EhrPatientInfo>;
 
-      // Return EhrPatientInfo from DB
-      return await patientInfoRepository.findOne();
+      // Return the current user's EHR info from DB
+      return await patientInfoRepository.findOne({
+         where: {
+            userID: currentUserId
+         }
+      });
    }
 }

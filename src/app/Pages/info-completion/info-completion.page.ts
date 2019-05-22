@@ -1,3 +1,4 @@
+import { ApplicationService } from './../../Services/application.service';
 import { Router } from '@angular/router';
 import { UserService } from './../../Services/user.service';
 import { PatientInfoService } from './../../Services/patient-info.service';
@@ -33,7 +34,7 @@ export class InfoCompletionPage implements OnInit
    constructor(
       private authService:AuthService, private patientInfoService:PatientInfoService,
       public loadingController:LoadingController, private locationService:LocationService,
-      private userService:UserService, private router:Router
+      private userService:UserService, private router:Router, private appService:ApplicationService
    ) { }
 
 
@@ -123,12 +124,13 @@ export class InfoCompletionPage implements OnInit
       await this.infoSaveLoading.then(loading => loading.present());
 
       // Save patient info on local DB
-      await this.patientInfoService.savePatientInfo(pateintInfo).then(success => {
-         if (success) {
-            this.setUserHasSavedInfo();
-         }
+      await this.patientInfoService.savePatientInfo(pateintInfo).then(() => {
+         this.setUserHasSavedInfo();
+      }).catch(error => {
+         this.appService.presentToast(error);
       });
    }
+
 
    private async setUserHasSavedInfo()
    {
@@ -146,10 +148,9 @@ export class InfoCompletionPage implements OnInit
          },
 
          error => {
-            console.log(error);
+            this.appService.presentToast(error.message);
          }
 
       );
-      
    }
 }

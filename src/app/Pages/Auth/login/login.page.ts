@@ -111,9 +111,8 @@ export class LoginPage implements OnInit
       // When user info is received from server
       this.authService.currentUser.subscribe((userInfo:UserInfo) => {
          
-         // If user is logged in and its the user's first time login
-         if (userInfo && userInfo.firstLogin) 
-         {
+         // If user is logged in and it's the user's first time login
+         if (userInfo && userInfo.firstLogin) {
             // Generate an address for the user
             this.generateUserAddress(userInfo);
          }

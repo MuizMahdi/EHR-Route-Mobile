@@ -31,7 +31,7 @@ export class ApplicationService
 
       const toast = await this.toastController.create({
          message,
-         duration: 5000,
+         duration: 10000,
          position: 'bottom',
          showCloseButton: true,
          closeButtonText: 'OK',

@@ -4,14 +4,14 @@ import { Toast } from '@ionic-native/toast/ngx';
 import { first, catchError } from 'rxjs/operators';
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { environment } from 'src/environments/environment.prod';
+import { environment } from 'src/environments/environment';
 import { Observable, throwError } from 'rxjs';
 import ModelMapper from '../Helpers/Utils/ModelMapper';
 import { getRepository, Repository } from 'typeorm';
 
 
 @Injectable({
-  providedIn: 'root'
+   providedIn: 'root'
 })
 
 export class AddressService 
